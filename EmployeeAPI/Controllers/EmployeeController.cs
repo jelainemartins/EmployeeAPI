@@ -19,7 +19,7 @@ namespace EmployeeAPI.Controllers
         [HttpPost]
         public IActionResult Add(EmployeeViewModel employeeViewModel)
         {
-            var employee = new Employee(employeeViewModel.FirstName, employeeViewModel.LastName, employeeViewModel.Birthdate, employeeViewModel.Sex, null);
+            var employee = new Employee(employeeViewModel.FirstName, employeeViewModel.LastName, employeeViewModel.Birthdate, employeeViewModel.Sex, employeeViewModel.Job, null); ;
             _employeeRepository.Add(employee);
             return CreatedAtAction(nameof(GetId), new { id = employee.Id }, employee);
         }
@@ -49,6 +49,13 @@ namespace EmployeeAPI.Controllers
         public IActionResult GetBySex(char sex)
         {
             var employees = _employeeRepository.GetBySex(sex);
+            return Ok(employees);
+        }
+
+        [HttpGet]
+        public IActionResult GetByJob(string job)
+        {
+            var employees = _employeeRepository.GetByJob(job);
             return Ok(employees);
         }
 

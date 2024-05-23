@@ -10,5 +10,6 @@ namespace EmployeeAPI.Interface
         List<Employee> AddList(List<Employee> employeeList);
         void Remove(int id);
         List<Employee> GetBySex(char sex);
+        List<Employee> GetByJob(string job);
     }
 }

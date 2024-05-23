@@ -10,14 +10,16 @@ namespace EmployeeAPI.Models
         public string LastName { get; private set; }
         public DateTime Birthdate { get; private set; }
         public char Sex { get; private set; }
+        public string Job { get; private set; }
         public string? Photo { get; private set; }
 
-        public Employee(string firstName, string lastName, DateTime birthdate, char sex, string? photo)
+        public Employee(string firstName, string lastName, DateTime birthdate, char sex, string? job, string? photo)
         {
             FirstName = firstName ?? throw new ArgumentNullException(nameof(FirstName));
             LastName = lastName;
             Birthdate = birthdate;
             Sex = sex;
+            Job = job;
             Photo = photo;
         }
     }

@@ -54,5 +54,10 @@ namespace EmployeeAPI.Repositories
                 _context.SaveChanges();
             }
         }
+
+        public List<Employee> GetByJob(string job)
+        {
+           return _context.Employees.Where(employee => employee.Job == job).ToList();
+        }
     }
 }
