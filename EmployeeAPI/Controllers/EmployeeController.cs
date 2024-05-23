@@ -27,8 +27,7 @@ namespace EmployeeAPI.Controllers
         [HttpPost]
         public IActionResult AddList(List<Employee> employeeList)
         {
-            _employeeRepository.AddList(employeeList);
-            return Ok(employeeList);
+            return Ok(_employeeRepository.AddList(employeeList));
         }
 
         [HttpGet]
