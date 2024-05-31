@@ -21,6 +21,7 @@ builder.Services.AddSwaggerGen();
 //Injeção de dependência;
 builder.Services.AddTransient<IEmployeeRepository, EmployeeRepository>();
 
+//Configuração de autenticação da chave privada;
 var key = Encoding.ASCII.GetBytes(Key.Secret);
 builder.Services.AddAuthentication(x =>
 {
