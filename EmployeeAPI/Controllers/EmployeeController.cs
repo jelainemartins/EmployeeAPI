@@ -19,7 +19,7 @@ namespace EmployeeAPI.Controllers
         [HttpPost]
         public IActionResult Add(EmployeeViewModel employeeViewModel)
         {
-            var employee = new Employee(employeeViewModel.FirstName, employeeViewModel.LastName, employeeViewModel.Birthdate, employeeViewModel.Sex, employeeViewModel.Job, null); ;
+            var employee = new Employee(employeeViewModel.FirstName, employeeViewModel.LastName, employeeViewModel.Birthdate, employeeViewModel.Sex, employeeViewModel.Job, null);
             _employeeRepository.Add(employee);
             return CreatedAtAction(nameof(GetId), new { id = employee.Id }, employee);
         }

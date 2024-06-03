@@ -1,6 +1,5 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Security.Permissions;
 using System.Text;
 using EmployeeAPI.Models;
 using Microsoft.IdentityModel.Tokens;

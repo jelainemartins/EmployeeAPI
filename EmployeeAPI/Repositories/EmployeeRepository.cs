@@ -1,10 +1,6 @@
-﻿using System.Collections.Generic;
-using EmployeeAPI.Context;
+﻿using EmployeeAPI.Context;
 using EmployeeAPI.Interface;
 using EmployeeAPI.Models;
-using Microsoft.AspNetCore.Connections;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.EntityFrameworkCore;
 
 namespace EmployeeAPI.Repositories
 {
@@ -57,7 +53,7 @@ namespace EmployeeAPI.Repositories
 
         public List<Employee> GetByJob(string job)
         {
-           return _context.Employees.Where(employee => employee.Job == job).ToList();
+            return _context.Employees.Where(employee => employee.Job == job).ToList();
         }
     }
 }
