@@ -9,7 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{E59761DE-496
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{0A2D177F-B607-48C0-A7E2-86F26CE2CF2B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmployeeAPITests", "Tests\EmployeeAPITests\EmployeeAPITests.csproj", "{1FFFA610-0272-4162-99DA-0929DECE614F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmployeeAPITests", "Tests\EmployeeAPITests\EmployeeAPITests.csproj", "{1FFFA610-0272-4162-99DA-0929DECE614F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
