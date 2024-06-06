@@ -2,7 +2,9 @@
 using EmployeeAPI.Models;
 using EmployeeAPI.ViewModel;
 using Microsoft.AspNetCore.Mvc;
-
+//CONTROLLER; Entrada de dados;
+//Responsável pelos Endpoints;
+//Posso iniciar aqui e depois ir para o Repository/Interface; Ctrl + .;
 namespace EmployeeAPI.Controllers
 {
     [ApiController]
@@ -18,12 +20,14 @@ namespace EmployeeAPI.Controllers
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-
         [HttpPost]
-        public IActionResult Add(EmployeeViewModel employeeViewModel)
+        public IActionResult Add([FromForm] EmployeeViewModel employeeViewModel)
         {
+            var filePath = Path.Combine("Storage", employeeViewModel.Photo.FileName);
+            using Stream fileStream = new FileStream(filePath, FileMode.Create);
+            employeeViewModel.Photo.CopyTo(fileStream);
             _logger.LogInformation($"Add {employeeViewModel}");
-            var employee = new Employee(employeeViewModel.FirstName, employeeViewModel.LastName, employeeViewModel.Birthdate, employeeViewModel.Sex, employeeViewModel.Job, null);
+            var employee = new Employee(employeeViewModel.FirstName, employeeViewModel.LastName, employeeViewModel.Birthdate.Value, employeeViewModel.Sex.Value, employeeViewModel.Job, filePath);
             _employeeRepository.Add(employee);
             return CreatedAtAction(nameof(GetId), new { id = employee.Id }, employee);
         }
@@ -33,6 +37,22 @@ namespace EmployeeAPI.Controllers
         {
             _logger.LogInformation($"AddList {employeeList}");
             return Ok(_employeeRepository.AddList(employeeList));
+        }
+
+        [HttpPost]
+        public IActionResult DownloadPhoto(int id)
+        {
+            _logger.LogInformation($"DownloadPhoto {id}");
+            var employee = _employeeRepository.GetById(id);
+            var dataBytes = System.IO.File.ReadAllBytes(employee.Photo);
+            return File(dataBytes, "image/png");
+        }
+
+        [HttpPut]
+        public IActionResult Update([FromForm] int id,[FromForm] EmployeeViewModel employeeViewModel)
+        {
+            var employee = _employeeRepository.Update(id, employeeViewModel);
+            return employee != null ? Ok(employee) : NotFound();
         }
 
         [HttpGet]
