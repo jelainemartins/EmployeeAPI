@@ -13,13 +13,24 @@ namespace EmployeeAPI.Models
         public string Job { get; private set; }
         public string? Photo { get; private set; }
 
-        public Employee(string firstName, string lastName, DateTime birthdate, char sex, string? job, string? photo)
+        public Employee(int id, string firstName, string lastName, DateTime birthdate, char sex, string job, string photo)
         {
-            FirstName = firstName ?? throw new ArgumentNullException(nameof(FirstName));
+            Id = id;
+            FirstName = firstName;
             LastName = lastName;
             Birthdate = birthdate;
             Sex = sex;
             Job = job;
+            Photo = photo;
+        }
+
+        public Employee(string firstName, string lastName, DateTime birthdate, char sex, string job, string photo)
+        {
+            FirstName = firstName ?? throw new ArgumentNullException(nameof(firstName));
+            LastName = lastName ?? throw new ArgumentNullException(nameof(lastName));
+            Birthdate = birthdate;
+            Sex = sex;
+            Job = job ?? throw new ArgumentNullException(nameof(job));
             Photo = photo;
         }
     }
