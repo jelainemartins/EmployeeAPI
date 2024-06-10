@@ -26,7 +26,7 @@ namespace EmployeeAPI.Controllers
             var filePath = Path.Combine("Storage", employeeViewModel.Photo.FileName);
             using Stream fileStream = new FileStream(filePath, FileMode.Create);
             employeeViewModel.Photo.CopyTo(fileStream);
-            _logger.LogInformation($"Add {employeeViewModel}");
+            _logger.LogInformation(nameof(Add));
             var employee = new Employee(employeeViewModel.FirstName, employeeViewModel.LastName, employeeViewModel.Birthdate.Value, employeeViewModel.Sex.Value, employeeViewModel.Job, filePath);
             _employeeRepository.Add(employee);
             return CreatedAtAction(nameof(GetId), new { id = employee.Id }, employee);
@@ -35,22 +35,23 @@ namespace EmployeeAPI.Controllers
         [HttpPost]
         public IActionResult AddList(List<Employee> employeeList)
         {
-            _logger.LogInformation($"AddList {employeeList}");
+            _logger.LogInformation(nameof(AddList));
             return Ok(_employeeRepository.AddList(employeeList));
         }
 
         [HttpPost]
         public IActionResult DownloadPhoto(int id)
         {
-            _logger.LogInformation($"DownloadPhoto {id}");
+            _logger.LogInformation(nameof(DownloadPhoto));
             var employee = _employeeRepository.GetById(id);
             var dataBytes = System.IO.File.ReadAllBytes(employee.Photo);
             return File(dataBytes, "image/png");
         }
 
         [HttpPut]
-        public IActionResult Update([FromForm] int id,[FromForm] EmployeeViewModel employeeViewModel)
+        public IActionResult Update([FromForm] int id, [FromForm] EmployeeViewModel employeeViewModel)
         {
+            _logger.LogInformation(nameof(Update));
             var employee = _employeeRepository.Update(id, employeeViewModel);
             return employee != null ? Ok(employee) : NotFound();
         }
@@ -58,7 +59,7 @@ namespace EmployeeAPI.Controllers
         [HttpGet]
         public IActionResult GetId(int id)
         {
-            _logger.LogInformation($"GetId {id}");
+            _logger.LogInformation(nameof(GetId));
             var employee = _employeeRepository.GetById(id);
             return employee == null ? NotFound() : Ok(employee);
         }
@@ -66,7 +67,7 @@ namespace EmployeeAPI.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            _logger.LogInformation("Get");
+            _logger.LogInformation(nameof(Get));
             var employees = _employeeRepository.Get();
             return Ok(employees);
         }
@@ -77,7 +78,7 @@ namespace EmployeeAPI.Controllers
             var employees = _employeeRepository.GetBySex(sex);
             if (employees != null && employees.Count > 0)
             {
-                _logger.LogInformation($"GetBySex {sex}");
+                _logger.LogInformation(nameof(GetBySex));
                 return Ok(employees);
             }
             else
@@ -90,15 +91,23 @@ namespace EmployeeAPI.Controllers
         [HttpGet]
         public IActionResult GetByJob(string job)
         {
-            _logger.LogInformation($"GetByJob {job}");
+            _logger.LogInformation(nameof(GetByJob));
             var employees = _employeeRepository.GetByJob(job);
             return Ok(employees);
+        }
+
+        [HttpGet]
+        public IActionResult GetByBirthdate(DateTime date)
+        {
+            _logger.LogInformation(nameof(GetByBirthdate));
+            var birthdate = _employeeRepository.GetByBirthdate(date);
+            return Ok(birthdate);
         }
 
         [HttpDelete]
         public IActionResult Delete(int id)
         {
-            _logger.LogInformation($"Delete {id}");
+            _logger.LogInformation(nameof(Delete));
             _employeeRepository.Remove(id);
             return Ok();
         }
