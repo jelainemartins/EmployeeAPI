@@ -14,5 +14,6 @@ namespace EmployeeAPI.Interface
         List<Employee> GetBySex(char sex);
         List<Employee> GetByJob(string job);
         Employee Update(int id, EmployeeViewModel employeeViewModel);
+        List<Employee> GetByBirthdate(DateTime date);
     }
 }
