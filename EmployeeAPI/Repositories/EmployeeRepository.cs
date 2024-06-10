@@ -43,6 +43,11 @@ namespace EmployeeAPI.Repositories
             return _context.Employees.Where(employee => employee.Job == job).ToList();
         }
 
+        public List<Employee> GetByBirthdate(DateTime date)
+        {
+            return _context.Employees.Where(employee => employee.Birthdate  == date).ToList();
+        }
+
         public List<Employee> AddList(List<Employee> employeeList)
         {
             _context.Employees.AddRange(employeeList);
