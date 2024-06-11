@@ -23,20 +23,39 @@ namespace EmployeeAPI.Controllers
         [HttpPost]
         public IActionResult Add([FromForm] EmployeeViewModel employeeViewModel)
         {
-            var filePath = Path.Combine("Storage", employeeViewModel.Photo.FileName);
-            using Stream fileStream = new FileStream(filePath, FileMode.Create);
-            employeeViewModel.Photo.CopyTo(fileStream);
             _logger.LogInformation(nameof(Add));
-            var employee = new Employee(employeeViewModel.FirstName, employeeViewModel.LastName, employeeViewModel.Birthdate.Value, employeeViewModel.Sex.Value, employeeViewModel.Job, filePath);
+            var filePath = string.Empty;
+            if (employeeViewModel.Photo != null)
+            {
+                filePath = Path.Combine("Storage", employeeViewModel.Photo.FileName);
+                using Stream fileStream = new FileStream(filePath, FileMode.Create);
+                employeeViewModel.Photo.CopyTo(fileStream);
+            }
+            var employee = new Employee(employeeViewModel.FirstName, employeeViewModel.LastName, employeeViewModel.Birthdate.Value, employeeViewModel.Sex.Value, employeeViewModel.Job, string.IsNullOrEmpty(filePath) ? null : filePath);
             _employeeRepository.Add(employee);
             return CreatedAtAction(nameof(GetId), new { id = employee.Id }, employee);
         }
 
         [HttpPost]
-        public IActionResult AddList(List<Employee> employeeList)
+        public IActionResult AddList(List<EmployeeViewModel> employeeList)
         {
             _logger.LogInformation(nameof(AddList));
-            return Ok(_employeeRepository.AddList(employeeList));
+            var listEmployee = new List<Employee>();
+            foreach (var employeeViewModel in employeeList)
+            {
+                var employee = new Employee(employeeViewModel.FirstName, employeeViewModel.LastName, employeeViewModel.Birthdate.Value, employeeViewModel.Sex.Value, employeeViewModel.Job, null);
+                listEmployee.Add(employee);
+            }
+            _employeeRepository.AddList(listEmployee);
+            return Ok(listEmployee);
+        }
+
+        [HttpDelete]
+        public IActionResult Delete(int id)
+        {
+            _logger.LogInformation(nameof(Delete));
+            _employeeRepository.Remove(id);
+            return Ok();
         }
 
         [HttpPost]
@@ -48,12 +67,20 @@ namespace EmployeeAPI.Controllers
             return File(dataBytes, "image/png");
         }
 
-        [HttpPut]
-        public IActionResult Update([FromForm] int id, [FromForm] EmployeeViewModel employeeViewModel)
+        [HttpGet]
+        public IActionResult Get()
         {
-            _logger.LogInformation(nameof(Update));
-            var employee = _employeeRepository.Update(id, employeeViewModel);
-            return employee != null ? Ok(employee) : NotFound();
+            _logger.LogInformation(nameof(Get));
+            var employees = _employeeRepository.Get();
+            return Ok(employees);
+        }
+
+        [HttpGet]
+        public IActionResult GetPage(int pageNumber, int pageQuantity)
+        {
+            _logger.LogInformation(nameof(GetPage));
+            var employees = _employeeRepository.GetPage(pageNumber, pageQuantity);
+            return Ok(employees);
         }
 
         [HttpGet]
@@ -62,14 +89,6 @@ namespace EmployeeAPI.Controllers
             _logger.LogInformation(nameof(GetId));
             var employee = _employeeRepository.GetById(id);
             return employee == null ? NotFound() : Ok(employee);
-        }
-
-        [HttpGet]
-        public IActionResult Get()
-        {
-            _logger.LogInformation(nameof(Get));
-            var employees = _employeeRepository.Get();
-            return Ok(employees);
         }
 
         [HttpGet]
@@ -104,12 +123,12 @@ namespace EmployeeAPI.Controllers
             return Ok(birthdate);
         }
 
-        [HttpDelete]
-        public IActionResult Delete(int id)
+        [HttpPut]
+        public IActionResult Update([FromForm] int id, [FromForm] EmployeeViewModel employeeViewModel)
         {
-            _logger.LogInformation(nameof(Delete));
-            _employeeRepository.Remove(id);
-            return Ok();
+            _logger.LogInformation(nameof(Update));
+            var employee = _employeeRepository.Update(id, employeeViewModel);
+            return employee != null ? Ok(employee) : NotFound();
         }
     }
 }

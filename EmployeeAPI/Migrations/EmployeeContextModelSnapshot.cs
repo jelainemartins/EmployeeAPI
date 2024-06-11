@@ -17,7 +17,7 @@ namespace EmployeeAPI.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.5")
+                .HasAnnotation("ProductVersion", "8.0.6")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -34,6 +34,9 @@ namespace EmployeeAPI.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Job")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastName")

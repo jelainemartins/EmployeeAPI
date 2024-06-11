@@ -11,13 +11,13 @@ namespace EmployeeAPI.Models
         public DateTime Birthdate { get; private set; }
         public char Sex { get; private set; }
         public string Job { get; private set; }
-        public string? Photo { get; private set; }
+        public string Photo { get; private set; }
 
         public Employee(int id, string firstName, string lastName, DateTime birthdate, char sex, string job, string photo)
         {
             Id = id;
-            FirstName = firstName;
-            LastName = lastName;
+            FirstName = firstName ?? throw new ArgumentNullException(nameof(firstName));
+            LastName = lastName ?? throw new ArgumentNullException(nameof(lastName));
             Birthdate = birthdate;
             Sex = sex;
             Job = job;
@@ -30,7 +30,7 @@ namespace EmployeeAPI.Models
             LastName = lastName ?? throw new ArgumentNullException(nameof(lastName));
             Birthdate = birthdate;
             Sex = sex;
-            Job = job ?? throw new ArgumentNullException(nameof(job));
+            Job = job;
             Photo = photo;
         }
     }

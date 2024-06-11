@@ -1,6 +1,5 @@
 ﻿using EmployeeAPI.Context;
 using EmployeeAPI.Interface;
-using EmployeeAPI.Migrations;
 using EmployeeAPI.Models;
 using EmployeeAPI.ViewModel;
 
@@ -23,15 +22,26 @@ namespace EmployeeAPI.Repositories
             _context.SaveChanges();
         }
 
-        public Employee GetById(int id)
+        public List<Employee> AddList(List<Employee> employeeList)
         {
-            return _context.Employees.Find(id);
+            _context.Employees.AddRange(employeeList);
+            _context.SaveChanges();
+            return Get();
         }
 
         public List<Employee> Get()
         {
             return _context.Employees.ToList();
             //return _context.Database.SqlQuery<Employee>($"SELECT * FROM Employees").ToList();
+        }
+        public List<Employee> GetPage(int pageNumber, int pageQuantity)
+        {
+            return _context.Employees.Skip((pageNumber - 1) * pageQuantity).Take(pageQuantity).ToList();
+        }
+
+        public Employee GetById(int id)
+        {
+            return _context.Employees.Find(id);
         }
 
         public List<Employee> GetBySex(char sex)
@@ -45,23 +55,7 @@ namespace EmployeeAPI.Repositories
 
         public List<Employee> GetByBirthdate(DateTime date)
         {
-            return _context.Employees.Where(employee => employee.Birthdate  == date).ToList();
-        }
-
-        public List<Employee> AddList(List<Employee> employeeList)
-        {
-            _context.Employees.AddRange(employeeList);
-            _context.SaveChanges();
-            return Get();
-        }
-        public void Remove(int id)
-        {
-            var employee = _context.Employees.Find(id);
-            if (employee != null)
-            {
-                _context.Remove(employee);
-                _context.SaveChanges();
-            }
+            return _context.Employees.Where(employee => employee.Birthdate == date).ToList();
         }
 
         public Employee Update(int id, EmployeeViewModel employeeViewModel)
@@ -89,6 +83,16 @@ namespace EmployeeAPI.Repositories
                 return newEmployee;
             }
             throw new Exception($"{id} nao encontrado.");
+        }
+
+        public void Remove(int id)
+        {
+            var employee = _context.Employees.Find(id);
+            if (employee != null)
+            {
+                _context.Remove(employee);
+                _context.SaveChanges();
+            }
         }
     }
 }
