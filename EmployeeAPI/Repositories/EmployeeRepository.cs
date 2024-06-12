@@ -60,9 +60,7 @@ namespace EmployeeAPI.Repositories
 
         public Employee Update(int id, EmployeeViewModel employeeViewModel)
         {
-            ///Buscando Employee por ID
             var employee = GetById(id);
-            ///Verifica se esta nulo
             if (employee != null)
             {
                 var filePath = string.Empty;
@@ -82,7 +80,7 @@ namespace EmployeeAPI.Repositories
                 _context.SaveChanges();
                 return newEmployee;
             }
-            throw new Exception($"{id} nao encontrado.");
+            throw new Exception($"{id} not found.");
         }
 
         public void Remove(int id)
